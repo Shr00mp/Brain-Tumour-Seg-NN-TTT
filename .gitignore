@@ -1,0 +1,7 @@
+# Environments
+.venv
+venv/
+venv.bak/
+
+# Data
+.nii.gz
