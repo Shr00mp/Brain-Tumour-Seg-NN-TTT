@@ -5,3 +5,6 @@ venv.bak/
 
 # Data
 .nii.gz
+
+# Other
+apex
