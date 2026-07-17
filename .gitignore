@@ -5,6 +5,7 @@ venv.bak/
 
 # Data
 .nii.gz
+brats_men_23
 
 # Other
 apex
