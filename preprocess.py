@@ -6,8 +6,8 @@ from data_preprocessing.preprocessor import Preprocessor
 from utils.utils import get_task_code
 
 parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
-parser.add_argument("--data", type=str, default="/data", help="Path to data directory")
-parser.add_argument("--results", type=str, default="/data", help="Path for saving results directory")
+parser.add_argument("--data", type=str, default="data", help="Path to data directory")
+parser.add_argument("--results", type=str, default="data", help="Path for saving results directory")
 parser.add_argument(
     "--exec_mode",
     type=str,

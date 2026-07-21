@@ -134,6 +134,6 @@ prepare_dataset(training_directory, True)
 print("Finished!")
 
 # %%
-glob(os.path.join(training_directory, "BraTS*"))
+# glob(os.path.join(training_directory, "BraTS*"))
 
 

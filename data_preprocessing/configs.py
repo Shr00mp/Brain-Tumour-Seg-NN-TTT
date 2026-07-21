@@ -1,6 +1,6 @@
 task = {
-    "01": "BraTS-MEN-Test",
-    "02": "BraTS-MEN-Train",
+    "01": "BraTS-MEN-Train",
+    "02": "BraTS-MEN-Test",
 }
 
 patch_size = {
