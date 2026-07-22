@@ -7,19 +7,19 @@ import torch
 import torch.nn as nn
 from functools import partial
 
-from apex.optimizers import FusedAdam, FusedSGD
+# from apex.optimizers import FusedAdam, FusedSGD
 
-# from data_loading.data_module import get_data_path, get_test_fnames
+from data_loading.data_module import get_data_path, get_test_fnames
 from monai.inferers import sliding_window_inference
 from monai.networks.nets import DynUNet
-from brats22_model import UNet3D
-from loss import Loss, LossBraTS
-from metrics import Dice
+from nnUNet.brats22_model import UNet3D
+from nnUNet.loss import Loss, LossBraTS
+from nnUNet.metrics import Dice
 from pytorch_lightning.utilities import rank_zero_only
 from scipy.special import expit, softmax
 from skimage.transform import resize
-# from utils.logger import DLLogger
-# from utils.utils import get_config_file, print0
+from utils.logger import DLLogger
+from utils.utils import get_config_file, print0
 
 print("Current working directory: ", os.getcwd())
 
@@ -39,7 +39,8 @@ class NNUnet(pl.LightningModule):
         self.test_imgs = []
         if not self.triton:
             self.learning_rate = args.learning_rate
-            loss = LossBraTS if self.args.brats else Loss
+            # loss = LossBraTS if self.args.brats else Loss
+            loss = Loss
             self.loss = loss(self.args.focal)
             if self.args.dim == 2:
                 self.tta_flips = [[2], [3], [2, 3]]
@@ -350,8 +351,18 @@ class NNUnet(pl.LightningModule):
 
     def configure_optimizers(self):
         optimizer = {
-            "sgd": FusedSGD(self.parameters(), lr=self.learning_rate, momentum=self.args.momentum),
-            "adam": FusedAdam(self.parameters(), lr=self.learning_rate, weight_decay=self.args.weight_decay),
+            "sgd": torch.optim.SGD(
+                self.parameters(),
+                fused=True,
+                lr=self.learning_rate,
+                momentum=self.args.momentum
+            ),
+            "adam": torch.optim.Adam(
+                self.parameters(),
+                fused=True,
+                lr=self.learning_rate,
+                weight_decay=self.args.weight_decay
+            )
         }[self.args.optimizer.lower()]
 
         if self.args.scheduler:

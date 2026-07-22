@@ -4,7 +4,7 @@ import torch
 from data_loading.data_module import DataModule
 from nnUNet.nnUnet import NNUnet
 from pytorch_lightning import Trainer, seed_everything
-from pytorch_lightning.callbacks import ModelCheckpoint, ModelSummary, RichProgressBar
+from pytorch_lightning.callbacks import ModelCheckpoint, ModelSummary, TQDMProgressBar
 from pytorch_lightning.plugins.io import AsyncCheckpointIO
 from pytorch_lightning.strategies import DDPStrategy
 from utils.args import get_main_args
@@ -56,7 +56,7 @@ def main():
         model = NNUnet.load_from_checkpoint(ckpt_path, strict=False, args=args)
     else:
         model = NNUnet(args)
-    callbacks = [RichProgressBar(), ModelSummary(max_depth=2)]
+    callbacks = [TQDMProgressBar(), ModelSummary(max_depth=2)]
     if args.benchmark:
         batch_size = args.batch_size if args.exec_mode == "train" else args.val_batch_size
         filnename = args.logname if args.logname is not None else "perf.json"

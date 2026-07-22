@@ -4,6 +4,7 @@ from monai.losses import DiceCELoss, DiceFocalLoss, DiceLoss, FocalLoss
 
 # %%
 class Loss(nn.Module):
+    # We will use this loss function for now since we want to directly use the labels given 
     def __init__(self, focal):
         super(Loss, self).__init__()
         if focal:
@@ -18,6 +19,8 @@ class Loss(nn.Module):
 
 
 class LossBraTS(nn.Module):
+    # The regions used to evaluate BraTS challenge are slightly different
+    # They are the WT, TC and ET regions instead of whatever labels were used
     def __init__(self, focal):
         super(LossBraTS, self).__init__()
         self.dice = DiceLoss(sigmoid=True, batch=True)

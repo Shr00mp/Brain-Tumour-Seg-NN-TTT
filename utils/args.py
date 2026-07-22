@@ -31,8 +31,8 @@ def get_main_args(strings=None):
         default="train",
         help="Execution mode to run the model",
     )
-    arg("--data", type=str, default="/data", help="Path to data directory")
-    arg("--results", type=str, default="/results", help="Path to results directory")
+    arg("--data", type=str, default="data/01_3d", help="Path to data directory")
+    arg("--results", type=str, default="results", help="Path to results directory")
     arg("--config", type=str, default=None, help="Config file with arguments")
     arg("--logname", type=str, default="logs.json", help="Name of dlloger output")
     arg("--task", type=str, default="01", help="Task number. MSD uses numbers 01-10")
@@ -53,7 +53,7 @@ def get_main_args(strings=None):
     arg("--seed", type=non_negative_int, default=None, help="Random seed")
     arg("--skip_first_n_eval", type=non_negative_int, default=0, help="Skip the evaluation for the first n epochs.")
     arg("--ckpt_path", type=str, default=None, help="Path for loading checkpoint")
-    arg("--ckpt_store_dir", type=str, default="/results", help="Path for saving checkpoint")
+    arg("--ckpt_store_dir", type=str, default="results", help="Path for saving checkpoint")
     arg("--fold", type=non_negative_int, default=0, help="Fold number")
     arg("--patience", type=positive_int, default=100, help="Early stopping patience")
     arg("--batch_size", type=positive_int, default=2, help="Batch size")
