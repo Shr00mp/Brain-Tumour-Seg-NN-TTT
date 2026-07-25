@@ -9,11 +9,14 @@ training_command = [
     "--filters", "64", "96", "128", "192", "256", "384", "512",
     "--scheduler",
     "--learning_rate", "0.0003",
-    "--epochs", "30",
+    "--epochs", "100",
     "--fold", "0",
     "--amp",
     "--gpus", "1",
-    "--save_ckpt"
+    "--save_ckpt",
+    "--brats22_model",
+    "--deep_supervision",
+    "--batch_size", "4"
 ]
 
 subprocess.run(training_command)
