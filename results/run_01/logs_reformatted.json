@@ -1,0 +1,525 @@
+[
+  {
+    "timestamp": "1784733383.079172",
+    "datetime": "2026-07-22 11:16:23.079172-04:00",
+    "elapsedtime": "97.29578",
+    "type": "LOG",
+    "step": 0,
+    "data": {
+      "Dice": 51.14,
+      "Val Loss": 0.82,
+      "Max Dice": 51.14,
+      "Best epoch": 0,
+      "Train Loss": 1.0194,
+      "D1": 51.25,
+      "D2": 37.0,
+      "D3": 65.16
+    }
+  },
+  {
+    "timestamp": "1784733474.549743",
+    "datetime": "2026-07-22 11:17:54.549743-04:00",
+    "elapsedtime": "188.766351",
+    "type": "LOG",
+    "step": 1,
+    "data": {
+      "Dice": 42.5,
+      "Val Loss": 0.73,
+      "Max Dice": 51.14,
+      "Best epoch": 0,
+      "Train Loss": 0.8668,
+      "D1": 15.69,
+      "D2": 48.7,
+      "D3": 63.1
+    }
+  },
+  {
+    "timestamp": "1784733566.18",
+    "datetime": "2026-07-22 11:19:26.180000-04:00",
+    "elapsedtime": "280.396608",
+    "type": "LOG",
+    "step": 2,
+    "data": {
+      "Dice": 49.41,
+      "Val Loss": 0.7,
+      "Max Dice": 51.14,
+      "Best epoch": 0,
+      "Train Loss": 0.7942,
+      "D1": 29.66,
+      "D2": 53.69,
+      "D3": 64.9
+    }
+  },
+  {
+    "timestamp": "1784733657.956111",
+    "datetime": "2026-07-22 11:20:57.956111-04:00",
+    "elapsedtime": "372.172719",
+    "type": "LOG",
+    "step": 3,
+    "data": {
+      "Dice": 49.2,
+      "Val Loss": 0.68,
+      "Max Dice": 51.14,
+      "Best epoch": 0,
+      "Train Loss": 0.7498,
+      "D1": 21.88,
+      "D2": 57.96,
+      "D3": 67.76
+    }
+  },
+  {
+    "timestamp": "1784733749.714928",
+    "datetime": "2026-07-22 11:22:29.714928-04:00",
+    "elapsedtime": "463.931536",
+    "type": "LOG",
+    "step": 4,
+    "data": {
+      "Dice": 49.02,
+      "Val Loss": 0.66,
+      "Max Dice": 51.14,
+      "Best epoch": 0,
+      "Train Loss": 0.7237,
+      "D1": 21.23,
+      "D2": 56.43,
+      "D3": 69.41
+    }
+  },
+  {
+    "timestamp": "1784733841.488461",
+    "datetime": "2026-07-22 11:24:01.488461-04:00",
+    "elapsedtime": "555.705069",
+    "type": "LOG",
+    "step": 5,
+    "data": {
+      "Dice": 58.1,
+      "Val Loss": 0.65,
+      "Max Dice": 58.1,
+      "Best epoch": 5,
+      "Train Loss": 0.7023,
+      "D1": 44.15,
+      "D2": 60.31,
+      "D3": 69.86
+    }
+  },
+  {
+    "timestamp": "1784733933.431212",
+    "datetime": "2026-07-22 11:25:33.431212-04:00",
+    "elapsedtime": "647.64782",
+    "type": "LOG",
+    "step": 6,
+    "data": {
+      "Dice": 54.88,
+      "Val Loss": 0.65,
+      "Max Dice": 58.1,
+      "Best epoch": 5,
+      "Train Loss": 0.6826,
+      "D1": 37.03,
+      "D2": 58.06,
+      "D3": 69.54
+    }
+  },
+  {
+    "timestamp": "1784734025.226557",
+    "datetime": "2026-07-22 11:27:05.226557-04:00",
+    "elapsedtime": "739.443165",
+    "type": "LOG",
+    "step": 7,
+    "data": {
+      "Dice": 48.55,
+      "Val Loss": 0.64,
+      "Max Dice": 58.1,
+      "Best epoch": 5,
+      "Train Loss": 0.6681,
+      "D1": 18.28,
+      "D2": 57.06,
+      "D3": 70.31
+    }
+  },
+  {
+    "timestamp": "1784734116.995362",
+    "datetime": "2026-07-22 11:28:36.995362-04:00",
+    "elapsedtime": "831.21197",
+    "type": "LOG",
+    "step": 8,
+    "data": {
+      "Dice": 48.25,
+      "Val Loss": 0.63,
+      "Max Dice": 58.1,
+      "Best epoch": 5,
+      "Train Loss": 0.6554,
+      "D1": 13.73,
+      "D2": 59.7,
+      "D3": 71.31
+    }
+  },
+  {
+    "timestamp": "1784734208.773091",
+    "datetime": "2026-07-22 11:30:08.773091-04:00",
+    "elapsedtime": "922.989699",
+    "type": "LOG",
+    "step": 9,
+    "data": {
+      "Dice": 60.18,
+      "Val Loss": 0.63,
+      "Max Dice": 60.18,
+      "Best epoch": 9,
+      "Train Loss": 0.6438,
+      "D1": 40.0,
+      "D2": 69.68,
+      "D3": 70.86
+    }
+  },
+  {
+    "timestamp": "1784734300.689111",
+    "datetime": "2026-07-22 11:31:40.689111-04:00",
+    "elapsedtime": "1014.905719",
+    "type": "LOG",
+    "step": 10,
+    "data": {
+      "Dice": 55.95,
+      "Val Loss": 0.62,
+      "Max Dice": 60.18,
+      "Best epoch": 9,
+      "Train Loss": 0.6348,
+      "D1": 50.45,
+      "D2": 46.05,
+      "D3": 71.34
+    }
+  },
+  {
+    "timestamp": "1784734392.504323",
+    "datetime": "2026-07-22 11:33:12.504323-04:00",
+    "elapsedtime": "1106.720931",
+    "type": "LOG",
+    "step": 11,
+    "data": {
+      "Dice": 61.63,
+      "Val Loss": 0.63,
+      "Max Dice": 61.63,
+      "Best epoch": 11,
+      "Train Loss": 0.6273,
+      "D1": 57.37,
+      "D2": 54.73,
+      "D3": 72.79
+    }
+  },
+  {
+    "timestamp": "1784734484.341098",
+    "datetime": "2026-07-22 11:34:44.341098-04:00",
+    "elapsedtime": "1198.557706",
+    "type": "LOG",
+    "step": 12,
+    "data": {
+      "Dice": 62.74,
+      "Val Loss": 0.62,
+      "Max Dice": 62.74,
+      "Best epoch": 12,
+      "Train Loss": 0.621,
+      "D1": 52.65,
+      "D2": 64.09,
+      "D3": 71.49
+    }
+  },
+  {
+    "timestamp": "1784734576.286778",
+    "datetime": "2026-07-22 11:36:16.286778-04:00",
+    "elapsedtime": "1290.503386",
+    "type": "LOG",
+    "step": 13,
+    "data": {
+      "Dice": 62.01,
+      "Val Loss": 0.62,
+      "Max Dice": 62.74,
+      "Best epoch": 12,
+      "Train Loss": 0.6144,
+      "D1": 53.24,
+      "D2": 59.94,
+      "D3": 72.86
+    }
+  },
+  {
+    "timestamp": "1784734668.103345",
+    "datetime": "2026-07-22 11:37:48.103345-04:00",
+    "elapsedtime": "1382.319953",
+    "type": "LOG",
+    "step": 14,
+    "data": {
+      "Dice": 55.07,
+      "Val Loss": 0.61,
+      "Max Dice": 62.74,
+      "Best epoch": 12,
+      "Train Loss": 0.6072,
+      "D1": 31.1,
+      "D2": 59.88,
+      "D3": 74.22
+    }
+  },
+  {
+    "timestamp": "1784734759.936195",
+    "datetime": "2026-07-22 11:39:19.936195-04:00",
+    "elapsedtime": "1474.152803",
+    "type": "LOG",
+    "step": 15,
+    "data": {
+      "Dice": 59.5,
+      "Val Loss": 0.61,
+      "Max Dice": 62.74,
+      "Best epoch": 12,
+      "Train Loss": 0.6032,
+      "D1": 49.84,
+      "D2": 57.41,
+      "D3": 71.24
+    }
+  },
+  {
+    "timestamp": "1784734851.679242",
+    "datetime": "2026-07-22 11:40:51.679242-04:00",
+    "elapsedtime": "1565.89585",
+    "type": "LOG",
+    "step": 16,
+    "data": {
+      "Dice": 63.98,
+      "Val Loss": 0.61,
+      "Max Dice": 63.98,
+      "Best epoch": 16,
+      "Train Loss": 0.5984,
+      "D1": 56.84,
+      "D2": 62.05,
+      "D3": 73.06
+    }
+  },
+  {
+    "timestamp": "1784734943.626509",
+    "datetime": "2026-07-22 11:42:23.626509-04:00",
+    "elapsedtime": "1657.843117",
+    "type": "LOG",
+    "step": 17,
+    "data": {
+      "Dice": 64.17,
+      "Val Loss": 0.6,
+      "Max Dice": 64.17,
+      "Best epoch": 17,
+      "Train Loss": 0.5941,
+      "D1": 58.21,
+      "D2": 60.49,
+      "D3": 73.79
+    }
+  },
+  {
+    "timestamp": "1784735035.633241",
+    "datetime": "2026-07-22 11:43:55.633241-04:00",
+    "elapsedtime": "1749.849849",
+    "type": "LOG",
+    "step": 18,
+    "data": {
+      "Dice": 55.53,
+      "Val Loss": 0.6,
+      "Max Dice": 64.17,
+      "Best epoch": 17,
+      "Train Loss": 0.5908,
+      "D1": 38.13,
+      "D2": 54.1,
+      "D3": 74.37
+    }
+  },
+  {
+    "timestamp": "1784735127.354657",
+    "datetime": "2026-07-22 11:45:27.354657-04:00",
+    "elapsedtime": "1841.571265",
+    "type": "LOG",
+    "step": 19,
+    "data": {
+      "Dice": 54.74,
+      "Val Loss": 0.62,
+      "Max Dice": 64.17,
+      "Best epoch": 17,
+      "Train Loss": 0.5872,
+      "D1": 37.37,
+      "D2": 58.09,
+      "D3": 68.77
+    }
+  },
+  {
+    "timestamp": "1784735219.207785",
+    "datetime": "2026-07-22 11:46:59.207785-04:00",
+    "elapsedtime": "1933.424393",
+    "type": "LOG",
+    "step": 20,
+    "data": {
+      "Dice": 57.99,
+      "Val Loss": 0.6,
+      "Max Dice": 64.17,
+      "Best epoch": 17,
+      "Train Loss": 0.5832,
+      "D1": 48.99,
+      "D2": 50.04,
+      "D3": 74.93
+    }
+  },
+  {
+    "timestamp": "1784735310.809534",
+    "datetime": "2026-07-22 11:48:30.809534-04:00",
+    "elapsedtime": "2025.026142",
+    "type": "LOG",
+    "step": 21,
+    "data": {
+      "Dice": 61.3,
+      "Val Loss": 0.6,
+      "Max Dice": 64.17,
+      "Best epoch": 17,
+      "Train Loss": 0.5795,
+      "D1": 53.94,
+      "D2": 57.35,
+      "D3": 72.61
+    }
+  },
+  {
+    "timestamp": "1784735402.084275",
+    "datetime": "2026-07-22 11:50:02.084275-04:00",
+    "elapsedtime": "2116.300883",
+    "type": "LOG",
+    "step": 22,
+    "data": {
+      "Dice": 62.14,
+      "Val Loss": 0.63,
+      "Max Dice": 64.17,
+      "Best epoch": 17,
+      "Train Loss": 0.5764,
+      "D1": 55.29,
+      "D2": 57.68,
+      "D3": 73.43
+    }
+  },
+  {
+    "timestamp": "1784735493.371556",
+    "datetime": "2026-07-22 11:51:33.371556-04:00",
+    "elapsedtime": "2207.588164",
+    "type": "LOG",
+    "step": 23,
+    "data": {
+      "Dice": 61.26,
+      "Val Loss": 0.59,
+      "Max Dice": 64.17,
+      "Best epoch": 17,
+      "Train Loss": 0.5729,
+      "D1": 47.51,
+      "D2": 60.3,
+      "D3": 75.98
+    }
+  },
+  {
+    "timestamp": "1784735584.675461",
+    "datetime": "2026-07-22 11:53:04.675461-04:00",
+    "elapsedtime": "2298.892069",
+    "type": "LOG",
+    "step": 24,
+    "data": {
+      "Dice": 63.54,
+      "Val Loss": 0.6,
+      "Max Dice": 64.17,
+      "Best epoch": 17,
+      "Train Loss": 0.5696,
+      "D1": 59.69,
+      "D2": 56.53,
+      "D3": 74.4
+    }
+  },
+  {
+    "timestamp": "1784735676.020965",
+    "datetime": "2026-07-22 11:54:36.020965-04:00",
+    "elapsedtime": "2390.237573",
+    "type": "LOG",
+    "step": 25,
+    "data": {
+      "Dice": 59.1,
+      "Val Loss": 0.61,
+      "Max Dice": 64.17,
+      "Best epoch": 17,
+      "Train Loss": 0.5668,
+      "D1": 47.67,
+      "D2": 56.59,
+      "D3": 73.05
+    }
+  },
+  {
+    "timestamp": "1784735767.346973",
+    "datetime": "2026-07-22 11:56:07.346973-04:00",
+    "elapsedtime": "2481.563581",
+    "type": "LOG",
+    "step": 26,
+    "data": {
+      "Dice": 65.13,
+      "Val Loss": 0.58,
+      "Max Dice": 65.13,
+      "Best epoch": 26,
+      "Train Loss": 0.5644,
+      "D1": 52.39,
+      "D2": 66.65,
+      "D3": 76.35
+    }
+  },
+  {
+    "timestamp": "1784735858.834772",
+    "datetime": "2026-07-22 11:57:38.834772-04:00",
+    "elapsedtime": "2573.05138",
+    "type": "LOG",
+    "step": 27,
+    "data": {
+      "Dice": 62.37,
+      "Val Loss": 0.59,
+      "Max Dice": 65.13,
+      "Best epoch": 26,
+      "Train Loss": 0.5623,
+      "D1": 56.24,
+      "D2": 56.68,
+      "D3": 74.19
+    }
+  },
+  {
+    "timestamp": "1784735950.187743",
+    "datetime": "2026-07-22 11:59:10.187743-04:00",
+    "elapsedtime": "2664.404351",
+    "type": "LOG",
+    "step": 28,
+    "data": {
+      "Dice": 55.95,
+      "Val Loss": 0.59,
+      "Max Dice": 65.13,
+      "Best epoch": 26,
+      "Train Loss": 0.5596,
+      "D1": 36.83,
+      "D2": 57.2,
+      "D3": 73.82
+    }
+  },
+  {
+    "timestamp": "1784736041.556317",
+    "datetime": "2026-07-22 12:00:41.556317-04:00",
+    "elapsedtime": "2755.772925",
+    "type": "LOG",
+    "step": 29,
+    "data": {
+      "Dice": 63.94,
+      "Val Loss": 0.6,
+      "Max Dice": 65.13,
+      "Best epoch": 26,
+      "Train Loss": 0.5573,
+      "D1": 56.54,
+      "D2": 61.56,
+      "D3": 73.74
+    }
+  },
+  {
+    "timestamp": "1784736041.932362",
+    "datetime": "2026-07-22 12:00:41.932362-04:00",
+    "elapsedtime": "2756.14897",
+    "type": "LOG",
+    "step": [],
+    "data": {
+      "dice_score": 65.13,
+      "train_loss": 0.5573,
+      "val_loss": 0.3487,
+      "Epoch": 26
+    }
+  }
+]

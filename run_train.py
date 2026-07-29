@@ -14,9 +14,11 @@ training_command = [
     "--amp",
     "--gpus", "1",
     "--save_ckpt",
-    "--brats22_model",
+    # "--brats22_model",
     "--deep_supervision",
-    "--batch_size", "4"
+    "--batch_size", "4",
+    "--logname", "logs.jsonl",
+    "--results", "results/run_02"
 ]
 
 subprocess.run(training_command)

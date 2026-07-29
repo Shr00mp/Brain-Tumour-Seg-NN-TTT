@@ -84,6 +84,7 @@ class NNUnet(pl.LightningModule):
                 loss += self.loss(preds[:, i], label) * 0.5**i # label not downsampled
                 weights += 0.5**i # keeps track of sum of weights used
             return loss / weights # normalised loss by dividing by weights
+        
         return self.loss(preds, label)
 
     def training_step(self, batch, batch_idx):

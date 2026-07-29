@@ -6,6 +6,7 @@ venv.bak/
 # Data
 .nii.gz
 data
+checkpoints
 
 # Other
 apex

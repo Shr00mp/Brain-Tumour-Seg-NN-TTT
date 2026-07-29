@@ -15,22 +15,25 @@ from pytorch_lightning.utilities import rank_zero_only
 class DLLogger:
     def __init__(self, log_dir, filename, append=True):
         super().__init__()
-        self.logs_filepath = os.path.join(log_dir, filename)
+        # self.logs_filepath = os.path.join(log_dir, filename)
+        # self.clean_logs_path = os.path.join(log_dir, "logs_reformatted.json")
         self._initialize_dllogger(log_dir, filename, append)
-        atexit.register(self.convert_json_format)
+        # atexit.register(self.convert_json_format)
 
-    def convert_json_format(self):
-        # Originally, lines of logs.json were in format DLLL {}, which is not accepted
-        # So we convert to json array at the end of training
-        correctly_formated_json = []
-        with open(self.logs_filepath, "r") as logs_file:
-            for line in logs_file:
-                line = line.strip()
-                if line.startswith("DLLL "):
-                    line = line[5:]
-                correctly_formated_json.append(json.loads(line))
-        with open(self.logs_filepath, "w") as logs_file:
-            json.dump(correctly_formated_json, logs_file, indent=2)
+    # def convert_json_format(self):
+    #     # Originally, lines of logs.json were in format DLLL {}, which is not accepted
+    #     # So we convert to json array at the end of training
+    #     correctly_formated_json = []
+    #     with open(self.logs_filepath, "r") as logs_file:
+    #         for line in logs_file:
+    #             line = line.strip()
+    #             if line.startswith("DLLL "):
+    #                 line = line[5:]
+    #             if line != "":
+    #                 correctly_formated_json.append(json.loads(line))
+    #     # automatically creates the file at clean_logs_path since doesn't exist yet
+    #     with open(self.clean_logs_path, "w") as logs_file:
+    #         json.dump(correctly_formated_json, logs_file, indent=2)
 
     @rank_zero_only
     def _initialize_dllogger(self, log_dir, filename, append):
