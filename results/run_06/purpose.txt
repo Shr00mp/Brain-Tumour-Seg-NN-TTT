@@ -1,0 +1,1 @@
+Purpose of this run is to see if the DynUNet model will be improved if I increase the number of filters in the first few layers so that it is able to better extract local features. 

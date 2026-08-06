@@ -32,7 +32,7 @@ def get_main_args(strings=None):
         help="Execution mode to run the model",
     )
     arg("--data", type=str, default="data/01_3d", help="Path to data directory")
-    arg("--results", type=str, default="results/run_02", help="Path to results directory")
+    arg("--results", type=str, default="results/run_05", help="Path to results directory")
     arg("--config", type=str, default=None, help="Config file with arguments")
     arg("--logname", type=str, default="logs.json", help="Name of dlloger output")
     arg("--task", type=str, default="01", help="Task number. MSD uses numbers 01-10")

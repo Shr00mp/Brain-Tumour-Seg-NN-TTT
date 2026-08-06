@@ -7,6 +7,8 @@ venv.bak/
 .nii.gz
 data
 checkpoints
+results/run_04/preds/predictions_last_task=01_fold=0
+.npy
 
 # Other
 apex

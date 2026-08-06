@@ -14,6 +14,11 @@ from utils.utils import make_empty_dir, set_cuda_devices, set_granularity, verif
 torch.backends.cuda.matmul.allow_tf32 = True
 torch.backends.cudnn.allow_tf32 = True
 
+import argparse
+import torch
+
+torch.serialization.add_safe_globals([argparse.Namespace])
+
 
 def get_trainer(args, callbacks):
     return Trainer(

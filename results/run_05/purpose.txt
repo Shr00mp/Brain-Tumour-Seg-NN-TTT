@@ -1,0 +1,1 @@
+Purpose of this run was to try the brats 22 model and save the checkpoints so that I could check whether or not it was making the same mistakes with the segmentations misclassifations and also regional mistakes.

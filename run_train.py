@@ -5,11 +5,9 @@ training_command = [
     sys.executable,
     "main.py",
     "--task", "01",
-    "--depth", "6",
-    "--filters", "64", "96", "128", "192", "256", "384", "512",
     "--scheduler",
     "--learning_rate", "0.0003",
-    "--epochs", "100",
+    "--epochs", "150",
     "--fold", "0",
     "--amp",
     "--gpus", "1",
@@ -18,7 +16,9 @@ training_command = [
     "--deep_supervision",
     "--batch_size", "4",
     "--logname", "logs.jsonl",
-    "--results", "results/run_02"
+    "--results", "results/run_06",
+    "--ckpt_store_dir", "results/run_06",
+    "--filters", "96", "96", "128", "192", "256", "384", "512"
 ]
 
 subprocess.run(training_command)

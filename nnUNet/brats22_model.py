@@ -127,10 +127,19 @@ class UNet3D(nn.Module):
     ):
         super(UNet3D, self).__init__()
         self.dim = 3
-        self.n_class = 3
+        self.n_class = 4 #3
         self.deep_supervision = True
         self.norm = "instancenorm3d"
-        self.filters = [64, 128, 256, 512, 768, 1024, 2048][: len(strides)]
+        self.filters = [
+        64,
+        96,
+        128,
+        192,
+        256,
+        384,
+        512][: len(strides)]
+        # self.filters = [64, 128, 256, 512, 768, 1024, 2048][: len(strides)]
+        # self.filters = [32, 64, 128, 256, 384, 512, 1024][: len(strides)]
 
         down_block = ConvBlock
         self.input_block = InputBlock(5, self.filters[0], norm=self.norm)
@@ -160,6 +169,7 @@ class UNet3D(nn.Module):
         self.apply(self.initialize_weights)
 
     def forward(self, input_data):
+        # import ipdb; ipdb.set_trace()
         out = self.input_block(input_data)
         encoder_outputs = [out]
         for downsample in self.downsamples:

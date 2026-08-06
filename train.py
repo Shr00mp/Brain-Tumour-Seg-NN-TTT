@@ -12,7 +12,7 @@ parser.add_argument("--amp", action="store_true", help="Enable automatic mixed p
 parser.add_argument("--tta", action="store_true", help="Enable test time augmentation")
 parser.add_argument("--bind", action="store_true", help="Enable test time augmentation")
 parser.add_argument("--resume_training", action="store_true", help="Resume training from checkpoint")
-parser.add_argument("--results", type=str, default="/results", help="Path to results directory")
+parser.add_argument("--results", type=str, default="/results/run_03", help="Path to results directory")
 parser.add_argument("--logname", type=str, default="train_logs.json", help="Name of dlloger output")
 parser.add_argument("--learning_rate", type=float, default=8e-4, help="Learning rate")
 
