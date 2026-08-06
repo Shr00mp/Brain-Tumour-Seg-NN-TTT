@@ -33,7 +33,17 @@ sample_slice_dict = {
     "00164": 130,
     "00165": 100,
     "00166": 100,
-    "00167": 100
+    "00167": 100,
+    "00168": 55,
+    "00169": 60,
+    "00170": 82,
+    "00172": 40,
+    "00173": 120,
+    "00174": 57,
+    "00175": 117,
+    "00176": 105,
+    "00177": 110,
+    "00178": 125
 }
 
 prediction_paths = glob.glob(os.path.join("results/run_04/preds/predictions_last_task=01_fold=0", "*.npy"))
@@ -65,6 +75,10 @@ for sample_num, slice_num in sample_slice_dict.items():
     scan = nib.load(scan_path)
     scan_data = scan.get_fdata()
     scan_slice = scan_data.transpose(1, 0, 2, 3)
+
+    tumour_slices = np.where(orig_data.any(axis=(0, 1)))[0]
+    if slice_num == 0: slice_num = tumour_slices[8]
+
     t1_slice = scan_slice[:, :, slice_num, 0]
     t1c_slice = scan_slice[:, :, slice_num, 1]
     t2_slice = scan_slice[:, :, slice_num, 2]
@@ -73,8 +87,6 @@ for sample_num, slice_num in sample_slice_dict.items():
     t1c_slice = np.rot90(t1c_slice, k=3)[:, ::-1]
     t2_slice = np.rot90(t2_slice, k=3)[:, ::-1]
     flair_slice = np.rot90(flair_slice, k=3)[:, ::-1]
-
-    tumour_slices = np.where(orig_data.any(axis=(0, 1)))[0]
     
     print("Seg mask shape: ", seg_mask.shape)
     print("Orig shape: ", orig_data.shape)
@@ -82,6 +94,7 @@ for sample_num, slice_num in sample_slice_dict.items():
     print(f"Slices with tumour for {sample_num}: ", tumour_slices)
 
     plt.figure(figsize=(15, 5))
+    plt.suptitle(f"Slice number: {slice_num}")
 
     plt.subplot(1, 6, 1)
     plt.imshow(t1_slice, cmap="gray", origin='lower')
