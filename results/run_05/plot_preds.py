@@ -46,7 +46,7 @@ sample_slice_dict = {
     "00178": 125
 }
 
-prediction_paths = glob.glob(os.path.join("results/run_05/preds/predictions_last_task=01_fold=0", "*.npy"))
+prediction_paths = glob.glob(os.path.join("results/run_05/preds/predictions_epoch=140-dice=73_10_task=01_fold=0", "*.npy"))
 orig_paths = glob.glob(os.path.join("data/BraTS-MEN-Train/labels", "BraTS*"))
 scan_paths = glob.glob(os.path.join("data/BraTS-MEN-Train/images", "BraTS*"))
 # orig_paths = glob.glob(os.path.join("data/data_for_experiments", "*_orig_lbl.npy"))

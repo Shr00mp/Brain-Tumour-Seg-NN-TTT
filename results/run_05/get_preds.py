@@ -9,7 +9,7 @@ training_command = [
     sys.executable,
     "main.py", # not sure if it will be able to find it
     "--exec_mode", "predict",
-    "--ckpt_path", "results/run_05/checkpoints/last.ckpt",
+    "--ckpt_path", "results/run_05/checkpoints/epoch=140-dice=73.10.ckpt",
     "--data", "data/data_for_experiments",
     "--results", "results/run_05/preds",
     "--gpus", "1",
