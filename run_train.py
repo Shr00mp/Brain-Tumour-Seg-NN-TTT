@@ -14,11 +14,14 @@ training_command = [
     "--save_ckpt",
     # "--brats22_model",
     "--deep_supervision",
-    "--batch_size", "4",
+    "--batch_size", "2",
     "--logname", "logs.jsonl",
-    "--results", "results/run_06",
-    "--ckpt_store_dir", "results/run_06",
-    "--filters", "96", "96", "128", "192", "256", "384", "512"
+    "--results", "results/run_07",
+    "--ckpt_store_dir", "results/run_07",
+    "--filters", "96", "128", "128", "192", "256", "384",
+    "--seed", "42"
+    # "--ckpt_path", "results/run_06/checkpoints/last.ckpt",
+    # "--resume_training"
 ]
 
 subprocess.run(training_command)

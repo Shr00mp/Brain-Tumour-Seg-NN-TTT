@@ -1,0 +1,1 @@
+Run DynUNet without ResBlocks and increase first two filters to 96, 128. Also keep last one at 384
