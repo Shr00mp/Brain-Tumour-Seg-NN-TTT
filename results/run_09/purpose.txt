@@ -1,0 +1,1 @@
+Building on top of the run08 configuration, we add an extra layer at the start. Note that due to how the nnUNet generates parameters, the strides for the last layer are [1, 1, 1]. This means there is no downsampling on the last layer.
