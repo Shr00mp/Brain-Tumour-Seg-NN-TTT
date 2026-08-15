@@ -105,6 +105,11 @@ class DynUNet(nn.Module):
         # Will probably have to rewrite this as well
         self.apply(self.initialize_weights)
 
+        self.deep_supervision = deep_supervision
+        self.deep_supr_num = deep_supr_num
+        if (self.deep_supervision):
+            self.deep_supervision_heads = self.get_deep_supervision_heads()
+
     def forward(self, x, get_reconstruction=False):
         skips = []
         x = self.input_block(x)
@@ -119,12 +124,26 @@ class DynUNet(nn.Module):
         # Main task path
         main_num_layers = len(self.upsamples)
         seg = x_bottleneck
+        deep_supervision_outputs = []
+
         for m in range(main_num_layers):
             main_upsample_index = main_num_layers - m - 1
             main_upsample_block = self.upsamples[m]
             skip = skips[main_upsample_index]
             seg = main_upsample_block(seg, skip)
+            if (self.deep_supervision and m < self.deep_supr_num):
+                # note that each of the deep supervision heads are output blocks
+                deep_supervision_outputs.append(
+                    self.deep_supervision_heads[m](seg)
+                )
         seg = self.output_block(seg)
+
+        if (self.training and self.deep_supervision):
+            outputs = []
+            outputs.append(seg)
+            for out in deep_supervision_outputs:
+                outputs.append(interpolate(out, seg.shape[2:]))
+            seg = torch.stack(outputs, dim=1)
 
         if (not get_reconstruction):
             return seg
@@ -272,3 +291,8 @@ class DynUNet(nn.Module):
             self.filters[0], 
             self.in_channels, 
             dropout=self.dropout)
+
+    def get_deep_supervision_heads(self):
+        return nn.ModuleList(
+            [self.get_output_block(i+1) for i in range(self.deep_supr_num)]
+        )
