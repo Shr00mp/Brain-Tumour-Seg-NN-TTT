@@ -294,5 +294,5 @@ class DynUNet(nn.Module):
 
     def get_deep_supervision_heads(self):
         return nn.ModuleList(
-            [self.get_output_block(i+1) for i in range(self.deep_supr_num)]
+            [self.get_output_block(len(self.filters)-2-i) for i in range(self.deep_supr_num)]
         )

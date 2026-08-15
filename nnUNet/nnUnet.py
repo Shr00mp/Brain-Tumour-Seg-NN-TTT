@@ -11,7 +11,8 @@ from functools import partial
 
 from data_loading.data_module import get_data_path, get_test_fnames
 from monai.inferers import sliding_window_inference
-from monai.networks.nets import DynUNet
+# from monai.networks.nets import DynUNet
+from nnUNet.dynamic_unet import DynUNet
 from nnUNet.brats22_model import UNet3D
 from nnUNet.loss import Loss, LossBraTS
 from nnUNet.metrics import Dice
@@ -156,8 +157,10 @@ class NNUnet(pl.LightningModule):
         # strides and kernels both store lists of lists for each level, i.e. every loop
         # sizes changes every loop, and stores zie of each dimension 
         strides, kernels, sizes = [], [], patch_size[:]
-        
-        
+        # import ipdb
+        # ipdb.set_trace()
+
+        layer_num = 1
         while True:
             # Calculates how the spacings of different voxel dimensions compare to each other
             # Specifically, how they compare to the smallest spacing size
@@ -190,7 +193,10 @@ class NNUnet(pl.LightningModule):
 
             # Break loop if strides are all 1 
             if all(s == 1 for s in stride):
-                break 
+                if layer_num <= self.args.depth-1:
+                    pass
+                else:
+                    break 
             
             # New sizes calculated as what happens after stride
             sizes = [i / j for i, j in zip(sizes, stride)]
@@ -203,6 +209,8 @@ class NNUnet(pl.LightningModule):
             if len(strides) == self.args.depth: # If reached max depth of UNet 
                 break
 
+            layer_num += 1
+            
         strides.insert(0, len(spacings) * [1])
         kernels.append(len(spacings) * [3])
         return config["in_channels"], config["n_class"], kernels, strides, patch_size
