@@ -1,0 +1,1 @@
+Testing if the neural network works just as well with the auxiliary branch added. The weight of reconstruction loss is the same as segmentation loss, i.e. weight of 1.0. Note that deep supervision was not used in the dynamic UNet model here.

@@ -1,0 +1,1 @@
+Used a weight of 0.1 as opposed to 1.0 in the previous run for the weight of the self-supervision task branch. Also note that deep supervision is still not being used here.
