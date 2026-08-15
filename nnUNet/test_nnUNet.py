@@ -52,6 +52,7 @@ class NNUnet(pl.LightningModule):
             if self.args.exec_mode in ["train", "evaluate"] and not self.args.benchmark:
                 self.dllogger = DLLogger(args.results, args.logname)
         self.reconstruction_loss = nn.L1Loss()
+        self.rec_loss_weight = 1e-9
 
     def forward(self, img):
         # Does inference, producing only the predicted value 
@@ -99,7 +100,7 @@ class NNUnet(pl.LightningModule):
     def compute_loss(self, preds, label, reconstruction, img):
         seg_loss = self.compute_seg_loss(preds, label)
         rec_loss = self.compute_rec_loss(reconstruction, img)
-        return seg_loss + (0.1*rec_loss)
+        return seg_loss + (self.rec_loss_weight * rec_loss)
 
     def training_step(self, batch, batch_idx):
         img, lbl = self.get_train_data(batch) # gets data with correct dimensions 
@@ -116,12 +117,9 @@ class NNUnet(pl.LightningModule):
             return None
         img, lbl = batch["image"], batch["label"]
         img, lbl = self.convert_data(img, lbl)
-        pred = self._forward(img) # prediction after doing full inference step 
-        loss = self.loss(pred, lbl) # for validation, only consider the loss between final prediction and label (diff from training)
-        if self.args.invert_resampled_y:
-            meta, lbl = batch["meta"][0].cpu().detach().numpy(), batch["orig_lbl"]
-            pred = nn.functional.interpolate(pred, size=tuple(meta[3]), mode="trilinear", align_corners=True)
-        self.dice.update(pred, lbl[:, 0], loss)
+        seg, rec = self.sliding_window_inference(img)
+        loss = self.compute_loss(seg, lbl, rec, img)
+        self.dice.update(seg, lbl[:, 0], loss)
 
     def test_step(self, batch, batch_idx):
         if self.args.exec_mode == "evaluate":
@@ -311,6 +309,9 @@ class NNUnet(pl.LightningModule):
             preds[:, :, depth] = self.sliding_window_inference(image[:, :, depth]) 
         return preds
 
+    def model_with_rec(self, img): # For sliding window to use
+        return self.model(img, get_reconstruction=True)
+
     def sliding_window_inference(self, image):
         # makes model prediction using sliding windows
         # is essential if size of input image does not match model
@@ -318,7 +319,7 @@ class NNUnet(pl.LightningModule):
             inputs=image,
             roi_size=self.patch_size,
             sw_batch_size=self.args.val_batch_size,
-            predictor=self.model,
+            predictor=self.model_with_rec,
             overlap=self.args.overlap,
             mode=self.args.blend,
         )
