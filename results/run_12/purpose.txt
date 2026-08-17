@@ -1,0 +1,1 @@
+Added deep supervision on the main task branch, so can now properly start testing the appropriate weight of the reconstruction loss. Start from extremely small number, e.g. 1e-9
