@@ -23,12 +23,19 @@ from skimage.transform import resize
 from utils.logger import DLLogger
 from utils.utils import get_config_file, print0
 
+import copy
+
 print("Current working directory: ", os.getcwd())
 
 # %%
 class NNUnet(pl.LightningModule):
     def __init__(self, args, triton=False, data_dir=None):
         super(NNUnet, self).__init__()
+
+        # hyperparameters for test time adaptation
+        self.ttt = True
+        self.ttt_steps = 1
+
         self.save_hyperparameters()
         self.args = args
         self.triton = triton
@@ -52,7 +59,7 @@ class NNUnet(pl.LightningModule):
             if self.args.exec_mode in ["train", "evaluate"] and not self.args.benchmark:
                 self.dllogger = DLLogger(args.results, args.logname)
         self.reconstruction_loss = nn.L1Loss()
-        self.rec_loss_weight = 1e-9
+        self.rec_loss_weight = 1
 
     def forward(self, img):
         # Does inference, producing only the predicted value 
@@ -82,7 +89,7 @@ class NNUnet(pl.LightningModule):
             c_norm = 1 / (2 - 2 ** (-len(preds))) # normalisation so that loss does not increase just because have more output heads
             return c_norm * loss
 
-        if self.args.deep_supervision:
+        if self.training and self.args.deep_supervision:
             loss, weights = 0.0, 0.0
             for i in range(preds.shape[1]): # for each output head
                 loss += self.loss(preds[:, i], label) * 0.5**i # label not downsampled
@@ -102,6 +109,73 @@ class NNUnet(pl.LightningModule):
         rec_loss = self.compute_rec_loss(reconstruction, img)
         return seg_loss + (self.rec_loss_weight * rec_loss)
 
+    def prep_tta_model(self, model):
+        # Freeze the entire DynUNet
+        for parameter in model.parameters():
+            parameter.requires_grad = False
+
+        # The part that we want to update is the shared encoder
+        for parameter in model.input_block.parameters():
+            parameter.requires_grad = True
+        for parameter in model.downsamples.parameters():
+            parameter.requires_grad = True
+        for parameter in model.bottleneck.parameters():
+            parameter.requires_grad = True
+
+    def do_ttt(self, img, model, num_steps):
+        self.prep_tta_model(model)
+
+        all_tta_params = []
+        for p in model.parameters():
+            if p.requires_grad: 
+                all_tta_params.append(p)
+
+        optimiser = torch.optim.Adam(
+            all_tta_params, lr=1e-5
+        )
+        model.train()
+        for i in range(num_steps):
+            optimiser.zero_grad()
+            # seg, rec = model(img, get_reconstruction=True)
+            # loss = self.compute_rec_loss(rec, img)
+            loss = self.tta_step(img, model)
+            loss.backward()
+            optimiser.step()
+
+            print(f"Current TTA step: {i+1} / {num_steps}")
+            print(f"Reconstruction task loss: {loss.item()}")
+
+    def sliding_window_tta(self, img, model):
+        return sliding_window_inference(
+            inputs=img,
+            roi_size=self.patch_size,
+            sw_batch_size=self.args.val_batch_size,
+            predictor=lambda x: model(x, get_reconstruction=True),
+            overlap=self.args.overlap,
+            mode=self.args.blend,
+        )
+
+    def predict_with_tta(self, img, num_steps):
+        # test time training
+        temp_model = copy.deepcopy(self.model)
+        self.do_ttt(
+            img, temp_model, num_steps
+        )
+        temp_model.eval()
+        # prediction
+        with torch.no_grad():
+            seg, rec = self.sliding_window_tta(
+                img, temp_model
+            )
+        del temp_model
+        return seg, rec
+
+    def tta_step(self, img, model):
+        # job is to implement patches, keeping the gradients, and return the loss
+        seg, rec = self.sliding_window_tta(img, model)
+        loss = self.compute_rec_loss(rec, img)
+        return loss
+
     def training_step(self, batch, batch_idx):
         img, lbl = self.get_train_data(batch) # gets data with correct dimensions 
         img, lbl = self.convert_data(img, lbl) # get converted data
@@ -118,46 +192,108 @@ class NNUnet(pl.LightningModule):
         img, lbl = batch["image"], batch["label"]
         img, lbl = self.convert_data(img, lbl)
         seg, rec = self.sliding_window_inference(img)
+        # import ipdb 
+        # ipdb.set_trace()
         loss = self.compute_loss(seg, lbl, rec, img)
         self.dice.update(seg, lbl[:, 0], loss)
 
     def test_step(self, batch, batch_idx):
         if self.args.exec_mode == "evaluate":
             return self.validation_step(batch, batch_idx)
+
         img = batch["image"]
         img = self.convert_ncdhw_to_ndhwc(img) # Switching the shape of tensor  
         if self.args.benchmark:
             pred = self._forward(img) # If benchmarking, just return the prediction 
             return
 
-        pred = self._forward(img).squeeze(0).cpu().detach().numpy() # Get prediction after full inference step 
+        if self.ttt:
+            seg, rec = self.predict_with_tta(img, self.ttt_steps)
+        else:
+            seg, rec = self.sliding_window_inference(img)
+
+        seg = seg.squeeze(0).cpu().detach().numpy()
+        rec = rec.squeeze(0).cpu().detach().numpy()
         if self.args.save_preds:
             meta = batch["meta"][0].cpu().detach().numpy()
             min_d, max_d = meta[0, 0], meta[1, 0]
             min_h, max_h = meta[0, 1], meta[1, 1]
             min_w, max_w = meta[0, 2], meta[1, 2]
-            n_class, original_shape, cropped_shape = pred.shape[0], meta[2], meta[3]
-            if not all(cropped_shape == pred.shape[1:]):
+            n_class = seg.shape[0]
+            original_shape = meta[2]
+            cropped_shape = meta[3]
+
+            # everything for segmentation
+            if not all(cropped_shape == seg.shape[1:]):
                 # Fixes patch sizes not matching the size of cropped shape
                 # Uses order=3 spline interpolation
-                resized_pred = np.zeros((n_class, *cropped_shape))
+                resized_seg = np.zeros((n_class, *cropped_shape))
                 for i in range(n_class):
-                    resized_pred[i] = resize(
-                        pred[i], cropped_shape, order=3, mode="edge", cval=0, clip=True, anti_aliasing=False
+                    resized_seg[i] = resize(
+                        seg[i], 
+                        cropped_shape, 
+                        order=3,
+                        mode="edge", 
+                        cval=0, 
+                        clip=True, 
+                        anti_aliasing=False
                     )
-                pred = resized_pred
+                seg = resized_seg
 
             # Restore the surrounding black area that was cropped out (they are zeros in numpy array)
-            final_pred = np.zeros((n_class, *original_shape))
-            final_pred[:, min_d:max_d, min_h:max_h, min_w:max_w] = pred
+            final_seg = np.zeros((n_class, *original_shape))
+            final_seg[:, min_d:max_d, min_h:max_h, min_w:max_w] = seg
 
             # Convert from logits (unbounded real numbers) to probabilities
             if self.args.brats:
-                final_pred = expit(final_pred) # Uses scipy logistic sigmoid function 
+                final_seg = expit(final_seg) # Uses scipy logistic sigmoid function 
             else:
-                final_pred = softmax(final_pred, axis=0)
+                final_seg = softmax(final_seg, axis=0)
 
-            self.save_mask(final_pred)
+
+            # everything for reconstruction
+            n_channels = rec.shape[0]
+
+            if not all(cropped_shape == rec.shape[1:]):
+                # Fixes patch sizes not matching the size of cropped shape
+                # Uses order=3 spline interpolation
+                resized_rec = np.zeros((n_channels, *cropped_shape))
+                for i in range(n_channels):
+                    resized_rec[i] = resize(
+                        rec[i], 
+                        cropped_shape, 
+                        order=3,
+                        mode="edge", 
+                        cval=0, 
+                        clip=True, 
+                        anti_aliasing=False
+                    )
+                rec = resized_rec
+
+            # Restore the surrounding black area that was cropped out (they are zeros in numpy array)
+            final_rec = np.zeros((n_channels, *original_shape))
+            final_rec[:, min_d:max_d, min_h:max_h, min_w:max_w] = rec
+
+            self.save_seg_rec(final_seg, final_rec)
+
+    def save_seg_rec(self, seg, rec):
+        if self.test_idx == 0:
+            data_path = get_data_path(self.args)
+            self.test_imgs, _ = get_test_fnames(self.args, data_path)
+        fname = os.path.basename(self.test_imgs[self.test_idx]).replace("_x", "")
+        # save seg
+        np.save(
+            os.path.join(self.seg_save_dir, fname), 
+            seg,
+            allow_pickle=False
+        )
+        # save reconstruction
+        np.save(
+            os.path.join(self.rec_save_dir, fname), 
+            rec,
+            allow_pickle=False
+        )
+        self.test_idx += 1
 
     def get_unet_params(self):
         # DEFINITIONS
