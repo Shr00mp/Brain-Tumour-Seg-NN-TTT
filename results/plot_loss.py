@@ -2,8 +2,7 @@ import json
 import matplotlib.pyplot as plt
 import pandas as pd
 
-CURR_RUN = "06"
-
+CURR_RUN = "12"
 df = []
 
 with open(f"results/run_{CURR_RUN}/logs.jsonl", "r") as f:
