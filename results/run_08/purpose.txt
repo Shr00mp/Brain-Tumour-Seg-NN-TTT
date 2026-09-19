@@ -1,0 +1,1 @@
+We are comparing this run to run02, which has been the best one so far. We add the res blocks and see if that causes any improvement or decrease in performance. Note that this test uses random seed which could cause variations in performance compared to run02.

@@ -1,4 +1,5 @@
 import pickle
+# Check what the configuration file contains 
 
 with open("data/01_3d/config.pkl", "rb") as f:
     configs = pickle.load(f)

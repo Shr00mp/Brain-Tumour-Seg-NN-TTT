@@ -15,3 +15,13 @@ orig_incorrect_preds
 # Other
 apex
 __pycache__
+
+test_run
+
+*.png
+!00004.png
+!00008.png
+!00010.png
+!00009.png
+!00018.png
+!00040.png

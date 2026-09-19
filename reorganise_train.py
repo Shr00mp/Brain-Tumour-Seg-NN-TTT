@@ -33,8 +33,8 @@ print("Current working directory: ", os.getcwd())
 # np.where(entire == 3)
 
 # %%
-training_directory = "data/BraTS-MEN-Train"
-testing_directory = "data/BraTS-MEN-Test"
+training_directory = "data/BraTS-Africa/95_Glioma"
+# testing_directory = "data/BraTS-MEN-Test"
 
 # %%
 # t1c = t1c

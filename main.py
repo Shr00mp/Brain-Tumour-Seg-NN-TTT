@@ -2,7 +2,8 @@ import os
 
 import torch
 from data_loading.data_module import DataModule
-from nnUNet.nnUnet import NNUnet
+from nnUNet.nnUNet_with_ttt import NNUnet # currently using nnUNet with TTT model 
+# from nnUNet.base_nnUNet import NNUnet  # to use base UNet without TTT, use this command instead
 from pytorch_lightning import Trainer, seed_everything
 from pytorch_lightning.callbacks import ModelCheckpoint, ModelSummary, TQDMProgressBar
 from pytorch_lightning.plugins.io import AsyncCheckpointIO
@@ -44,6 +45,7 @@ def get_trainer(args, callbacks):
         limit_train_batches=1.0 if args.train_batches == 0 else args.train_batches,
         limit_val_batches=1.0 if args.test_batches == 0 else args.test_batches,
         limit_test_batches=1.0 if args.test_batches == 0 else args.test_batches,
+        inference_mode=False,
     )
 
 
@@ -51,6 +53,7 @@ def main():
     args = get_main_args()
     set_granularity()
     set_cuda_devices(args)
+     
     if args.seed is not None:
         seed_everything(args.seed)
     data_module = DataModule(args)
@@ -98,7 +101,7 @@ def main():
             model.start_benchmark = 1
             trainer.test(model, dataloaders=data_module.test_dataloader(), verbose=False)
     elif args.exec_mode == "train":
-        trainer.fit(model, datamodule=data_module)
+        trainer.fit(model, datamodule=data_module, ckpt_path=ckpt_path)
     elif args.exec_mode == "evaluate":
         trainer.validate(model, dataloaders=data_module.val_dataloader())
     elif args.exec_mode == "predict":
@@ -106,11 +109,19 @@ def main():
             ckpt_name = "_".join(args.ckpt_path.split("/")[-1].split(".")[:-1])
             dir_name = f"predictions_{ckpt_name}"
             dir_name += f"_task={model.args.task}_fold={model.args.fold}"
+
             if args.tta:
                 dir_name += "_tta"
             save_dir = os.path.join(args.results, dir_name)
+
             model.save_dir = save_dir
             make_empty_dir(save_dir)
+
+            model.seg_save_dir = os.path.join(save_dir, "seg")
+            model.rec_save_dir = os.path.join(save_dir, "rec")
+            make_empty_dir(model.seg_save_dir)
+            make_empty_dir(model.rec_save_dir)
+
         model.args = args
         trainer.test(model, dataloaders=data_module.test_dataloader())
 

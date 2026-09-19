@@ -1,1 +1,1 @@
-Number of steps = 1
+Using test-time adaptation with number of steps = 1

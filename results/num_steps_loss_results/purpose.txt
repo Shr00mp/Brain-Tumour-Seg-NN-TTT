@@ -1,0 +1,1 @@
+Ran the model with TTT on several different samples and tracked the loss over number of times weights are updated based on reconstruction loss. The behaviour seems really weird since loss goes up with number of steps.

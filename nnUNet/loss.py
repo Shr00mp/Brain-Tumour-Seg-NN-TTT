@@ -21,6 +21,7 @@ class Loss(nn.Module):
 class LossBraTS(nn.Module):
     # The regions used to evaluate BraTS challenge are slightly different
     # They are the WT, TC and ET regions instead of whatever labels were used
+    # So this loss converts to that system 
     def __init__(self, focal):
         super(LossBraTS, self).__init__()
         self.dice = DiceLoss(sigmoid=True, batch=True)

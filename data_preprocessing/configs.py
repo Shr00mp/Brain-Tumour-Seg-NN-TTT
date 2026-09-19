@@ -1,3 +1,4 @@
+# tasks numbers are used for preprocessing 
 task = {
     "01": "BraTS-MEN-Train",
     "02": "BraTS-MEN-Test",

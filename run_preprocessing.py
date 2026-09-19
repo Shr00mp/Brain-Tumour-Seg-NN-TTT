@@ -1,10 +1,12 @@
 import subprocess
 import sys
+# specifies commands for running preprocessing on specific tasks
+# the folder that corresponds to each task is specified in data_preprocessing > configs.py
 
 training_preprocess = [
     sys.executable,
     "preprocess.py",
-    "--task", "01",
+    "--task", "03",
     "--ohe",
     "--exec_mode", "training"
 ]
@@ -12,7 +14,7 @@ training_preprocess = [
 testing_preprocess = [
     sys.executable,
     "preprocess.py",
-    "--task", "02",
+    "--task", "04",
     "--ohe",
     "--exec_mode", "training"
 ]

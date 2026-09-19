@@ -6,24 +6,27 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 import matplotlib.patches as mpatches
 
+# Background (label 0) = Black 
+# NETC (label 1) = red
+# SNFH (label 2) = blue
+# ET (label 3) = green 
 label_colors = {
     0: "black",
     1: "red",
     2: "blue",
     3: "green"
 }
-
 label_names = {
     0: "Background",
     1: "NETC",
     2: "SNFH",
     3: "ET"
 }
-
+# creates colour map for handling colorus of different labels
 cmap = ListedColormap([label_colors[i] for i in range(4)])
 handles = [mpatches.Patch(color=label_colors[i], label=label_names[i]) for i in range(4)]
 
-sample_slice_dict = {
+sample_slice_dict = { # specify slices that contain brain tumour for each sample number
     "00155": 95,
     "00156": 100,
     "00157": 45,
@@ -47,14 +50,17 @@ sample_slice_dict = {
 }
 
 prediction_paths = glob.glob(os.path.join("results/run_12/preds/predictions_epoch=107-dice=72_55_task=01_fold=0/seg", "*.npy"))
-orig_paths = glob.glob(os.path.join("data/BraTS-MEN-Train/labels", "BraTS*"))
-scan_paths = glob.glob(os.path.join("data/BraTS-MEN-Train/images", "BraTS*"))
-# orig_paths = glob.glob(os.path.join("data/data_for_experiments", "*_orig_lbl.npy"))
+orig_paths = glob.glob(os.path.join("data/BraTS-MEN-Train/labels", "BraTS*")) # path to ground truth labels
+scan_paths = glob.glob(os.path.join("data/BraTS-MEN-Train/images", "BraTS*")) # path to raw scans 
 
 pred_path = ""
 orig_path = ""
 scan_path = ""
+# Iterates through each sample and generates plot for raw scans, ground truth and model prediction next to one another
+# Each sample is uniquely identified by its sample num
 for sample_num, slice_num in sample_slice_dict.items():
+
+    # Finds paths to prediction, ground truth and raw scan that match current sample num
     for p in prediction_paths: 
         if f"{sample_num}" in p:
             pred_path = p
@@ -65,25 +71,31 @@ for sample_num, slice_num in sample_slice_dict.items():
         if f"{sample_num}" in s:
             scan_path = s
 
+    # Load predicted segmentation path 
     prob_pred = np.load(pred_path)
     seg_mask = np.argmax(prob_pred, axis=0)
-    # orig_data = np.load(orig_path)
-    seg_mask = seg_mask.transpose(2, 1, 0)
+    seg_mask = seg_mask.transpose(2, 1, 0) # swap axis to match ground truth label 
+
+    # Load ground truth label
     orig = nib.load(orig_path) 
     orig_data = orig.get_fdata()
 
+    # Load raw scan 
     scan = nib.load(scan_path)
     scan_data = scan.get_fdata()
-    scan_slice = scan_data.transpose(1, 0, 2, 3)
+    scan_slice = scan_data.transpose(1, 0, 2, 3) # swap axis to match ground truth label
 
+    # if current sample does not have specified slice to look at, then find slices that have tumour regions
+    # and get slice at index 8
     tumour_slices = np.where(orig_data.any(axis=(0, 1)))[0]
     if slice_num == 0: slice_num = tumour_slices[8]
 
+    # get slices for each modality 
     t1_slice = scan_slice[:, :, slice_num, 0]
     t1c_slice = scan_slice[:, :, slice_num, 1]
     t2_slice = scan_slice[:, :, slice_num, 2]
     flair_slice = scan_slice[:, :, slice_num, 3]
-    t1_slice = np.rot90(t1_slice, k=3)[:, ::-1]
+    t1_slice = np.rot90(t1_slice, k=3)[:, ::-1] # rotate slices to match ground truth label 
     t1c_slice = np.rot90(t1c_slice, k=3)[:, ::-1]
     t2_slice = np.rot90(t2_slice, k=3)[:, ::-1]
     flair_slice = np.rot90(flair_slice, k=3)[:, ::-1]
@@ -93,6 +105,7 @@ for sample_num, slice_num in sample_slice_dict.items():
     print("Data sample shape: ", scan_data.shape)
     print(f"Slices with tumour for {sample_num}: ", tumour_slices)
 
+    # Plot graph 
     plt.figure(figsize=(15, 5))
     plt.suptitle(f"Slice number: {slice_num}")
 
